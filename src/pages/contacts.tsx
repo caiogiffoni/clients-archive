@@ -7,7 +7,6 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Link } from "react-router-dom";
 
 const style = {
   position: "absolute" as "absolute",
@@ -21,7 +20,7 @@ const style = {
   p: 4,
 };
 
-export const Home = () => {
+export const Contacts = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -61,6 +60,9 @@ export const Home = () => {
             }}
           >
             <Box>
+              <Typography variant="h5" sx={{ p: 1 }}>
+                Cliente:
+              </Typography>
               <Box
                 sx={{
                   p: 1,
@@ -103,14 +105,54 @@ export const Home = () => {
                 <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
                   Data de registro: 25/12/2022
                 </Typography>
-                <Button variant="contained">
-                  <Link
-                    to="/contacts"
-                    style={{ textDecoration: "none", color: "white" }}
-                  >
-                    Adicionar Contatos
-                  </Link>
-                </Button>
+              </Box>
+            </Box>
+            <Box>
+              <Typography variant="h5" sx={{ p: 1 }}>
+                Contato(s):
+              </Typography>
+              <Box
+                sx={{
+                  p: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h6" sx={{ display: "inline" }}>
+                  João Marques Oliveira
+                </Typography>
+                <Box>
+                  <ModeEditIcon sx={{ pr: 1 }} onClick={handleOpen} />
+                  <DeleteIcon />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  p: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
+                  Email: joao.marques@oliveira.com
+                </Typography>
+                <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
+                  Contato: 85 9 99958478
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  p: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
+                  Data de registro: 25/12/2022
+                </Typography>
               </Box>
             </Box>
           </Box>
