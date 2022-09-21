@@ -7,7 +7,6 @@ import { userLoginService } from "../../services/user/userLogin.service";
 export default class UserController {
   //Criando User
   async store(req: Request, res: Response) {
-    // fazer yup *****************
     const { name, email, password } = req.body;
     const createUser = await userCreateService({
       name,
@@ -16,6 +15,7 @@ export default class UserController {
     });
     return res.status(201).json(createUser);
   }
+  
   //Listando todos os usuários
   async index(req: Request, res: Response) {
     const users = await userListService();

@@ -15,7 +15,7 @@ import { User } from "./User";
 
 @Entity("client")
 @Unique(["email"])
-class Client {
+export class Client {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
@@ -43,4 +43,3 @@ class Client {
     }
   }
 }
-export { Client };
