@@ -16,5 +16,7 @@ clientRouter.post(
   clientController.store
 );
 clientRouter.get("", authMiddleware, clientController.index);
+clientRouter.patch("/:client_id", authMiddleware, clientController.update);
+clientRouter.delete("/:client_id", authMiddleware, clientController.delete);
 
 export default clientRouter;

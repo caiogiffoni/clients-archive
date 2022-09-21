@@ -18,3 +18,13 @@ export interface IClient {
   telephone: string;
   DOR: Date;
 }
+
+export interface IClientUpdate extends IClientRequest {
+  user_id: string;
+  client_id: string;
+}
+
+export interface IClientDelete {
+  client_id: string;
+  user_id: string;
+}
