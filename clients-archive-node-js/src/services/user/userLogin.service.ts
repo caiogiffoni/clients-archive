@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { compare } from "bcryptjs";
 import { IUserLogin } from "../../interfaces/user";
 import "dotenv/config";
-import AppError from "../../errors/appError";
+import { AppError } from "../../errors/appError";
 
 export const userLoginService = async ({
   email,

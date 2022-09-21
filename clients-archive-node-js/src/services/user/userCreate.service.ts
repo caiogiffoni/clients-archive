@@ -2,7 +2,7 @@ import { User } from "../../entities/User";
 import { hash } from "bcryptjs";
 import { AppDataSource } from "../../data-source";
 import { IUser, IUserRequest } from "../../interfaces/user";
-import  AppError  from "../../errors/appError";
+import { AppError } from "../../errors/appError";
 
 export const userCreateService = async ({
   name,

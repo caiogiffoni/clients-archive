@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ClientController from "../controllers/client/clientControllers";
+import { authMiddleware } from "../middlewares/auth.middleware";
 import {
   handleClientError,
   validateClientCreate,
@@ -10,6 +11,7 @@ const clientController = new ClientController();
 
 clientRouter.post(
   "",
+  authMiddleware,
   validateClientCreate(handleClientError),
   clientController.store
 );

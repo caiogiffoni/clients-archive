@@ -14,7 +14,6 @@ import { Contact } from "./Contact";
 import { User } from "./User";
 
 @Entity("client")
-@Unique(["email"])
 export class Client {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
@@ -31,7 +30,7 @@ export class Client {
   @CreateDateColumn()
   DOR: Date;
 
-  @ManyToOne(() => User, (user) => user.clients)
+  @ManyToOne(() => User, (user) => user.clients, { eager: true })
   user: User;
 
   @OneToMany(() => Contact, (contact) => contact.client)

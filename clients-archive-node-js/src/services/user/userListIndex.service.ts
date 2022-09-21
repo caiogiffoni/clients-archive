@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../data-source";
 import { User } from "../../entities/User";
-import AppError from "../../errors/appError";
+import { AppError } from "../../errors/appError";
 import { IUser } from "../../interfaces/user";
 
 export const userListIndexService = async (id: string): Promise<IUser> => {

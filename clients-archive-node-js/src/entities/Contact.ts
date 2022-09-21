@@ -13,7 +13,6 @@ import { v4 as uuid } from "uuid";
 import { Client } from "./Clients";
 
 @Entity("contact")
-@Unique(["email"])
 class Contact {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
