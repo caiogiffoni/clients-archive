@@ -12,15 +12,16 @@ export const clientCreateService = async ({
 }: IClientCreate): Promise<IClient> => {
   const clientRepository = AppDataSource.getRepository(Client);
   const userRepository = AppDataSource.getRepository(User);
-  const checkUserExists = await userRepository.findOne({
+  const user = await userRepository.findOne({
     where: {
       id,
     },
   });
 
-  if (!checkUserExists) {
+  if (!user) {
     throw new AppError("No user found", 404);
   }
+  
   // AJUSTAR UNIQUE EMAIL PARA CADA USER APENAS
   const checkClientExists = await clientRepository.findOne({
     where: {
@@ -41,7 +42,7 @@ export const clientCreateService = async ({
     telephone,
   });
 
-  client.user = checkUserExists;
+  client.user = user;
 
   await clientRepository.save(client);
 

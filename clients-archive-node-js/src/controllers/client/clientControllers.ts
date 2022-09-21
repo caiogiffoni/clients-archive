@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { clientCreateService } from "../../services/client/clientCreate.service";
+import { clientListService } from "../../services/client/clientList.service";
 
 export default class ClientController {
-  //Criando User
+  //Criando Cliente
   async store(req: Request, res: Response) {
     const { id } = req.user;
     const { name, email, telephone } = req.body;
@@ -15,11 +16,12 @@ export default class ClientController {
     return res.status(201).json(createUser);
   }
 
-  //Listando todos os usuários
-  //   async index(req: Request, res: Response) {
-  //     const users = await userListService();
-  //     return res.status(200).json(users);
-  //   }
+  // Listando todos os clientes
+    async index(req: Request, res: Response) {
+      const { id } = req.user;
+      const users = await clientListService(id);
+      return res.status(200).json(users);
+    }
 
   //Listar User por Id
   //   async show(req: Request, res: Response) {

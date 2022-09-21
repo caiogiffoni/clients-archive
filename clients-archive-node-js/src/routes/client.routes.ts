@@ -15,5 +15,6 @@ clientRouter.post(
   validateClientCreate(handleClientError),
   clientController.store
 );
+clientRouter.get("", authMiddleware, clientController.index);
 
 export default clientRouter;
