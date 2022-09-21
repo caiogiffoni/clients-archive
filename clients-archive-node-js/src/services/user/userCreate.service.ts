@@ -4,7 +4,7 @@ import { AppDataSource } from "../../data-source";
 import { IUser, IUserRequest } from "../../interfaces/user";
 import  AppError  from "../../errors/appError";
 
-const userCreateService = async ({
+export const userCreateService = async ({
   name,
   email,
   password,
@@ -36,5 +36,3 @@ const userCreateService = async ({
 
   return newUser
 };
-
-export default userCreateService;
