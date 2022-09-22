@@ -31,6 +31,7 @@ export default class ClientController {
   //     const listbyId = await userListIndexService(id);
   //     return res.status(200).json(listbyId);
   //   }
+  
   //Atualizar User
   async update(req: Request, res: Response) {
     const client_id = req.params.client_id;
@@ -46,6 +47,7 @@ export default class ClientController {
     });
     return res.status(200).json(updateUser);
   }
+
   //Deletando Client
   async delete(req: Request, res: Response) {
     const client_id = req.params.client_id;

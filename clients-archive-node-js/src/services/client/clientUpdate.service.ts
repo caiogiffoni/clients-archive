@@ -25,12 +25,12 @@ export const clientUpdateService = async ({
     throw new AppError("Client not found!", 404);
   }
 
-  const updatedZone = {
+  const updatedClient = {
     ...client,
     name,
     email,
     telephone,
   };
 
-  return clientRepository.save(updatedZone);
+  return clientRepository.save(updatedClient);
 };
