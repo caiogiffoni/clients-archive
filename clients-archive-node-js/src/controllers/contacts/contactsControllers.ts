@@ -8,7 +8,8 @@ export default class ContactController {
   //Criando contato
   async store(req: Request, res: Response) {
     const user_id = req.user.id;
-    const { name, email, telephone, client_id } = req.body;
+    const { client_id } = req.params;
+    const { name, email, telephone } = req.body;
     const createUser = await contactCreateService({
       name,
       email,

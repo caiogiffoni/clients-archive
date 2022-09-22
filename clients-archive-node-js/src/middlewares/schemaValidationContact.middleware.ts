@@ -7,7 +7,6 @@ export const handleContactError: SchemaOf<IContactSchema> = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().email().required(),
   telephone: yup.string().required(),
-  client_id: yup.string().required().uuid(),
 });
 
 export const validateContactCreate =

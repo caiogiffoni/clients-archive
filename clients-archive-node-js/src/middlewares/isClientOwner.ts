@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AppDataSource } from "../data-source";
 import { Client } from "../entities/Clients";
-import { Contact } from "../entities/Contact";
 import { AppError } from "../errors/appError";
 
 export const isClientOwnerMiddleware = async (

@@ -26,7 +26,7 @@ class Contact {
   @Column()
   telephone: string;
 
-  @ManyToOne(() => Client, (client) => client.contacts, { onDelete: "CASCADE" })
+  @ManyToOne(() => Client, (client) => client.contacts, { onDelete: "CASCADE", eager:true })
   client: Client;
 
   constructor() {
