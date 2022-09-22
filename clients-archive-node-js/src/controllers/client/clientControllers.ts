@@ -52,6 +52,6 @@ export default class ClientController {
     const user_id = req.user.id;
 
     const deleteUser = await clientDeleteService({client_id, user_id});
-    return res.status(200).json({ message: "User deleted!" });
+    return res.status(200).json({ message: "Client deleted!" });
   }
 }
