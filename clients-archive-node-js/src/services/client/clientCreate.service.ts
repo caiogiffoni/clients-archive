@@ -33,7 +33,7 @@ export const clientCreateService = async ({
   });
 
   if (checkClientExists) {
-    throw new AppError("This email already exists on your contacts", 401);
+    throw new AppError("This email already exists on your client", 401);
   }
 
   const client = clientRepository.create({

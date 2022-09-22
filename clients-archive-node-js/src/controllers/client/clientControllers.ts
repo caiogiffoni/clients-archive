@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { clientCreateService } from "../../services/client/clientCreate.service";
 import { clientListService } from "../../services/client/clientList.service";
 import { clientUpdateService } from "../../services/client/clientUpdate.service";
-import { clientDeleteService } from "../../services/client/zoneDelete.service";
+import { clientDeleteService } from "../../services/client/clientDelete.service";
 
 export default class ClientController {
   //Criando Cliente

@@ -24,9 +24,9 @@ class Contact {
   email: string;
 
   @Column()
-  contact: string;
+  telephone: string;
 
-  @ManyToOne(() => Client, (client) => client.contacts)
+  @ManyToOne(() => Client, (client) => client.contacts, { eager: true })
   client: Client;
 
   constructor() {
