@@ -5,6 +5,10 @@ import {
   handleClientError,
   validateClientCreate,
 } from "../middlewares/schemaValidationClient.middleware";
+import {
+  handleClientUpdateError,
+  validateClientUpdate,
+} from "../middlewares/schemaValidationClientUpdate.middleware";
 
 const clientRouter = Router();
 const clientController = new ClientController();
@@ -16,7 +20,12 @@ clientRouter.post(
   clientController.store
 );
 clientRouter.get("", authMiddleware, clientController.index);
-clientRouter.patch("/:client_id", authMiddleware, clientController.update);
+clientRouter.patch(
+  "/:client_id",
+  validateClientUpdate(handleClientUpdateError),
+  authMiddleware,
+  clientController.update
+);
 clientRouter.delete("/:client_id", authMiddleware, clientController.delete);
 
 export default clientRouter;

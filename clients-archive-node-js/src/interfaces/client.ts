@@ -28,3 +28,9 @@ export interface IClientDelete {
   client_id: string;
   user_id: string;
 }
+
+export interface IClientUpdateSchema {
+  name?: string;
+  email?: string;
+  telephone?: string;
+}
