@@ -30,7 +30,9 @@ export class Client {
   @CreateDateColumn()
   DOR: Date;
 
-  @ManyToOne(() => User, (user) => user.clients, { eager: true })
+  @ManyToOne(() => User, (user) => user.clients, {
+    eager: true,
+  })
   user: User;
 
   @OneToMany(() => Contact, (contact) => contact.client)

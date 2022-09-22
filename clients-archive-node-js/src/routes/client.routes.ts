@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ClientController from "../controllers/client/clientControllers";
 import { authMiddleware } from "../middlewares/auth.middleware";
+import { isClientOwnerMiddleware } from "../middlewares/isClientOwner";
 import {
   handleClientError,
   validateClientCreate,
@@ -24,8 +25,14 @@ clientRouter.patch(
   "/:client_id",
   validateClientUpdate(handleClientUpdateError),
   authMiddleware,
+  isClientOwnerMiddleware,
   clientController.update
 );
-clientRouter.delete("/:client_id", authMiddleware, clientController.delete);
+clientRouter.delete(
+  "/:client_id",
+  authMiddleware,
+  isClientOwnerMiddleware,
+  clientController.delete
+);
 
 export default clientRouter;
