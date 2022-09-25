@@ -14,7 +14,10 @@ import { forwardRef, Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { SnackBarRegister } from "../components/snack-bar";
+import {
+  SnackBarRegister,
+  SnackBarRegisterLogin,
+} from "../components/snack-bar";
 import { IUserRequest } from "../interface/user";
 import api from "../services";
 
@@ -56,7 +59,7 @@ export const Register = () => {
     resolver: yupResolver(schema),
   });
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -74,6 +77,7 @@ export const Register = () => {
     api
       .post("/users", user)
       .then(async (_) => {
+        setSeverity("success");
         setMessage("Cadastro Realizado! Você será redirecionado.");
         setOpen(true);
         await delay(3000);
@@ -194,7 +198,7 @@ export const Register = () => {
           </Box>
         </Box>
       </Box>
-      <SnackBarRegister
+      <SnackBarRegisterLogin
         open={open}
         setOpen={setOpen}
         message={message}

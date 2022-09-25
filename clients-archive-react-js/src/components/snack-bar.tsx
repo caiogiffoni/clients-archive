@@ -17,11 +17,11 @@ interface ISnackBar {
   severity: AlertColor;
 }
 
-export const SnackBarRegister = ({
+export const SnackBarRegisterLogin = ({
   open,
   setOpen,
   message,
-  severity ,
+  severity,
 }: ISnackBar) => {
   const handleClose = (
     event: React.SyntheticEvent | Event,
