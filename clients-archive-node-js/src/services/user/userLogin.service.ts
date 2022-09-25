@@ -32,6 +32,7 @@ export const userLoginService = async ({
   const token = jwt.sign(
     {
       id: user.id,
+      name: user.name,
     },
     process.env.SECRET_KEY as string, //preciso desse alias pq caso contrário gera error.
     {
