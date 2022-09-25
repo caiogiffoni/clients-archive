@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import {
-  SnackBarRegister,
   SnackBarRegisterLogin,
 } from "../components/snack-bar";
 import { IUserRequest } from "../interface/user";
