@@ -8,6 +8,8 @@ import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Link } from "react-router-dom";
+import { useToken } from "../providers/token";
+import { useUsername } from "../providers/username";
 
 const style = {
   position: "absolute" as "absolute",
@@ -25,6 +27,12 @@ export const Home = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const { setToken, token } = useToken();
+  const { username } = useUsername();
+
+  console.log(token);
+  console.log(username);
 
   const [value, setValue] = useState<Dayjs | null>(
     dayjs("2014-08-18T21:11:54")

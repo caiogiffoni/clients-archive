@@ -3,6 +3,7 @@ import { Contacts } from "../pages/contacts";
 import { Home } from "../pages/home";
 import { Login } from "../pages/login";
 import { Register } from "../pages/register";
+import { TokenProvider } from "../providers/token";
 
 export const Routers = () => {
   return (

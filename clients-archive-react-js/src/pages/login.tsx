@@ -18,6 +18,11 @@ import { SnackBarRegisterLogin } from "../components/snack-bar";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+import jwt_decode from "jwt-decode";
+import { ITokenDecoded } from "../interface/token";
+import { useToken } from "../providers/token";
+import { useUsername } from "../providers/username";
+
 type FormValues = {
   email: string;
   password: string;
@@ -26,6 +31,10 @@ type FormValues = {
 export const Login = () => {
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const { setToken, token } = useToken();
+  const { setUsername } = useUsername();
+
+  console.log(token);
 
   const schema = yup.object().shape({
     email: yup
@@ -57,10 +66,18 @@ export const Login = () => {
       email,
       password,
     };
-    console.log(login);
     api
       .post("/login", login)
-      .then(async (_) => {
+      .then(async (res) => {
+        const { token } = res.data;
+        localStorage.setItem("@CA:token", JSON.stringify(token));
+        setToken(token);
+        const decoded: ITokenDecoded = jwt_decode(token);
+        const { name } = decoded;
+
+        localStorage.setItem("@CA:username", JSON.stringify(name));
+        setUsername(name);
+
         setSeverity("success");
         setMessage(
           "Login Realizado! Você será redirecionado para o dashboard."
