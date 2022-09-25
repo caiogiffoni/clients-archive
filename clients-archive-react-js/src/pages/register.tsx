@@ -8,13 +8,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import { Fragment, useState, forwardRef } from "react";
+import { forwardRef, Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { SnackBarRegister } from "../components/snack-bar";
 import { IUserRequest } from "../interface/user";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import api from "../services";
 
 type FormValues = {
@@ -23,13 +24,6 @@ type FormValues = {
   password: string;
   confirmPassword: string;
 };
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 export const Register = () => {
   const schema = yup.object().shape({
@@ -65,33 +59,8 @@ export const Register = () => {
   let navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
-
-  const handleClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  const action = (
-    <Fragment>
-      <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </Fragment>
-  );
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("");
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -102,27 +71,25 @@ export const Register = () => {
       email,
       password,
     };
-    setOpen(true);
-    navigate("/");
     api
       .post("/users", user)
       .then(async (_) => {
+        setMessage("Cadastro Realizado! Você será redirecionado.");
         setOpen(true);
         await delay(3000);
         navigate("/");
       })
       .catch((err) => {
-        // toast({
-        //   title: `${
-        //     err.response.data === "Email already exists"
-        //       ? "Email já existente"
-        //       : err.response.data.message
-        //   }`,
-        //   status: "error",
-        //   isClosable: true,
-        // });
-        
-        console.log(err);
+        setSeverity("error");
+        setMessage(
+          `${
+            err.response.data.message == "This email already exists"
+              ? "Esse email já está cadastrado"
+              : err.response.data.message
+          }`
+        );
+        setOpen(true);
+        // console.log(err);
       });
   };
 
@@ -227,11 +194,12 @@ export const Register = () => {
           </Box>
         </Box>
       </Box>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          Cadastro Realizado! Você será redirecionado.
-        </Alert>
-      </Snackbar>
+      <SnackBarRegister
+        open={open}
+        setOpen={setOpen}
+        message={message}
+        severity={severity}
+      />
     </>
   );
 };
