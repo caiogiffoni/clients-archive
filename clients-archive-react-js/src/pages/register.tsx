@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import { forwardRef, Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -60,7 +60,7 @@ export const Register = () => {
 
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [severity, setSeverity] = useState("");
+  const [severity, setSeverity] = useState<AlertColor>("success");
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
