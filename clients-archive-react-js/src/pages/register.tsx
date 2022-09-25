@@ -14,11 +14,11 @@ import { forwardRef, Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import {
-  SnackBarRegisterLogin,
-} from "../components/snack-bar";
+import { SnackBarRegisterLogin } from "../components/snack-bar";
 import { IUserRequest } from "../interface/user";
 import api from "../services";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 type FormValues = {
   name: string;
@@ -57,6 +57,9 @@ export const Register = () => {
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
+
+  const theme = useTheme();
+  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   const navigate = useNavigate();
 
@@ -112,7 +115,7 @@ export const Register = () => {
           flexDirection="column"
           alignItems="center"
           sx={{
-            width: 700,
+            width: { xs: 250, sm: 400, md: 700 },
             backgroundColor: "#E0E0E0",
             "&:hover": {
               backgroundColor: "#cfcccc",
@@ -120,7 +123,7 @@ export const Register = () => {
             borderRadius: "15px",
           }}
         >
-          <Typography variant="h3" sx={{ p: 3 }}>
+          <Typography variant={matchesSm ? "h5" : "h3"} sx={{ p: 3 }}>
             Register
           </Typography>
           <Box
@@ -128,7 +131,7 @@ export const Register = () => {
             flexDirection="column"
             alignItems="center"
             sx={{
-              width: "60%",
+              width: { xs: "80%", sm: "60%" },
               borderRadius: "15px",
             }}
           >
@@ -187,11 +190,14 @@ export const Register = () => {
               onClick={handleSubmit(onSubmitFunction)}
               variant="contained"
               endIcon={<SendIcon />}
-              sx={{ width: "40%", mt: "12px" }}
+              sx={{ width: { sm: "50%", md: "40%" }, mt: "12px" }}
             >
               Cadastrar
             </Button>
-            <Typography variant="subtitle1" sx={{ p: 1 }}>
+            <Typography
+              variant={matchesSm ? "body2" : "subtitle1"}
+              sx={{ p: 1 }}
+            >
               Já tem conta? Vá para o <Link to="/">Login</Link>
             </Typography>
           </Box>

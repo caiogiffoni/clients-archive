@@ -1,16 +1,22 @@
 import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import Box from "@mui/material/Box";
-import { AlertColor, Button, TextField, Typography } from "@mui/material";
+import {
+  AlertColor,
+  Button,
+  makeStyles,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { IUserLogin } from "../interface/user";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import api from "../services";
-import {
-  SnackBarRegisterLogin,
-} from "../components/snack-bar";
+import { SnackBarRegisterLogin } from "../components/snack-bar";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 type FormValues = {
   email: string;
@@ -18,6 +24,9 @@ type FormValues = {
 };
 
 export const Login = () => {
+  const theme = useTheme();
+  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -91,7 +100,7 @@ export const Login = () => {
           alignItems="center"
           justifyContent="center"
           sx={{
-            width: 700,
+            width: { xs: 280, sm: 500, md: 700 },
             backgroundColor: "#E0E0E0",
             "&:hover": {
               backgroundColor: "#cfcccc",
@@ -99,7 +108,7 @@ export const Login = () => {
             borderRadius: "15px",
           }}
         >
-          <Typography variant="h3" sx={{ p: 3 }}>
+          <Typography variant={matchesSm ? "h5" : "h3"} sx={{ p: 3 }}>
             Login
           </Typography>
           <Box
@@ -107,7 +116,7 @@ export const Login = () => {
             flexDirection="column"
             alignItems="center"
             sx={{
-              width: "60%",
+              width: { xs: "80%", sm: "60%" },
               borderRadius: "15px",
             }}
           >
@@ -140,11 +149,14 @@ export const Login = () => {
               onClick={handleSubmit(onSubmitFunction)}
               variant="contained"
               endIcon={<SendIcon />}
-              sx={{ width: "30%", mt: "12px" }}
+              sx={{ width: { sm: "50%", md: "40%" }, mt: "12px" }}
             >
               Logar
             </Button>
-            <Typography variant="subtitle1" sx={{ p: 1 }}>
+            <Typography
+              variant={matchesSm ? "body2" : "subtitle1"}
+              sx={{ p: 1 }}
+            >
               Ainda não tem conta? <Link to="/register">Cadastre-se</Link>
             </Typography>
           </Box>
