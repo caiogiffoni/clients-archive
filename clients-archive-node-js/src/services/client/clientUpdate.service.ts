@@ -1,7 +1,7 @@
 import { AppDataSource } from "../../data-source";
 import { Client } from "../../entities/Clients";
 import { AppError } from "../../errors/appError";
-import { IClientUpdate } from "../../interfaces/client";
+import { IClient, IClientUpdate } from "../../interfaces/client";
 
 export const clientUpdateService = async ({
   email,
@@ -9,7 +9,7 @@ export const clientUpdateService = async ({
   name,
   telephone,
   user_id,
-}: IClientUpdate): Promise<Client> => {
+}: IClientUpdate): Promise<IClient> => {
   const clientRepository = AppDataSource.getRepository(Client);
 
   const client = await clientRepository.findOne({
@@ -25,6 +25,16 @@ export const clientUpdateService = async ({
     throw new AppError("Client not found!", 404);
   }
 
+    // // AJUSTAR UNIQUE EMAIL PARA CADA USER APENAS
+    // const checkContactExists = await clientRepository.findOne({
+    //   where: {
+    //     email,
+    //     client: {
+    //       id: client_id,
+    //     },
+    //   },
+    // });
+
   const updatedClient = {
     ...client,
     name,
@@ -32,5 +42,17 @@ export const clientUpdateService = async ({
     telephone,
   };
 
-  return clientRepository.save(updatedClient);
+  clientRepository.save(updatedClient)
+
+  const newClient = {
+    ...updatedClient,
+    user: {
+      id: updatedClient.user.id,
+      name: updatedClient.user.name,
+      email: updatedClient.user.email,
+      created_at: updatedClient.user.created_at,
+    },
+  }
+
+  return newClient
 };

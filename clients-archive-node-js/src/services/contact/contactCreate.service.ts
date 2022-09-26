@@ -51,5 +51,18 @@ export const contactCreateService = async ({
 
   await contactRepository.save(contact);
 
-  return contact;
+  const newContact = {
+    ...contact,
+    client: {
+      ...contact.client,
+      user: {
+        id: contact.client.user.id,
+        name: contact.client.user.name,
+        email: contact.client.user.email,
+        created_at: contact.client.user.created_at,
+      },
+    },
+  };
+
+  return newContact;
 };

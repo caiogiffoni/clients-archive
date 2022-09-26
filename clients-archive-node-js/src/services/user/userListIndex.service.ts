@@ -6,7 +6,14 @@ import { IUser } from "../../interfaces/user";
 export const userListIndexService = async (id: string): Promise<IUser> => {
   const userRepository = AppDataSource.getRepository(User);
 
-  const user = await userRepository.find();
+  const user = await userRepository.find({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      created_at: true,
+    },
+  });
 
   const users = user.find((userId) => userId.id === id);
 

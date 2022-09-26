@@ -22,7 +22,6 @@ export const contactListService = async ({
     throw new AppError("Client not found!", 404);
   }
 
-
   const contactRepository = AppDataSource.getRepository(Contact);
 
   const contacts = await contactRepository.find({
@@ -36,5 +35,20 @@ export const contactListService = async ({
     },
   });
 
-  return contacts;
+  const newContacts = contacts.map((contact) => {
+    return {
+      ...contact,
+      client: {
+        ...contact.client,
+        user: {
+          id: contact.client.user.id,
+          name: contact.client.user.name,
+          email: contact.client.user.email,
+          created_at: contact.client.user.created_at,
+        },
+      },
+    };
+  });
+
+  return newContacts;
 };

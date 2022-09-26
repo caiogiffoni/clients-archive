@@ -13,5 +13,17 @@ export const clientListService = async (id: string): Promise<IClient[]> => {
     },
   });
 
-  return clients;
+  const newClients = clients.map((c) => {
+    return {
+      ...c,
+      user: {
+        id: c.user.id,
+        name: c.user.name,
+        email: c.user.email,
+        created_at: c.user.created_at,
+      },
+    };
+  });
+
+  return newClients;
 };

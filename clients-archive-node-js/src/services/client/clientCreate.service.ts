@@ -21,7 +21,7 @@ export const clientCreateService = async ({
   if (!user) {
     throw new AppError("No user found", 404);
   }
-  
+
   // AJUSTAR UNIQUE EMAIL PARA CADA USER APENAS
   const checkClientExists = await clientRepository.findOne({
     where: {
@@ -46,5 +46,15 @@ export const clientCreateService = async ({
 
   await clientRepository.save(client);
 
-  return client;
+  const newClient = {
+    ...client,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      created_at: user.created_at,
+    },
+  };
+
+  return newClient;
 };
