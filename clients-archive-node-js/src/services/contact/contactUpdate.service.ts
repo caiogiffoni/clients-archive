@@ -30,6 +30,23 @@ export const contactUpdateService = async ({
     throw new AppError("Contact not found!", 404);
   }
 
+  // AJUSTAR UNIQUE EMAIL PARA CADA USER APENAS
+  const checkContactExists = await contactRepository.findOne({
+    where: {
+      email,
+      client: {
+        id: client_id,
+      },
+    },
+  });
+
+  if (checkContactExists) {
+    throw new AppError(
+      "This email already exists on your contacts for this client",
+      401
+    );
+  }
+
   const updatedContact = {
     ...contact,
     name,
