@@ -25,6 +25,8 @@ import { IClientPost } from "../interface/clients";
 import { useToken } from "../providers/token";
 import { SnackBarRegisterLogin } from "../components/snack-bar";
 import { ModalConfirmationEdit } from "../components/modalConfirmationEdit";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 type FormValues = {
   name: string;
@@ -56,11 +58,15 @@ export const Home = () => {
     resolver: yupResolver(schema),
   });
 
-  const { token } = useToken();
+  const { token, authenticated, setAuthenticated } = useToken();
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [openToast, setOpenToast] = useState(false);
+  const navigate = useNavigate();
 
+  if (!authenticated) {
+    return navigate("/");
+  }
 
   const onSubmitFunction = ({ name, email, telephone }: IClientPost) => {
     const client = {
@@ -134,8 +140,16 @@ export const Home = () => {
           <Typography variant={matchesSm ? "h5" : "h3"} sx={{ p: 3 }}>
             Bem vindo(a), {username}!
           </Typography>
-          <Box p={1}>
-            <LogoutIcon />
+          <Box
+            p={1}
+            onClick={() => {
+              localStorage.clear();
+              setAuthenticated("");
+            }}
+          >
+            <Link to={`/`}>
+              <LogoutIcon />
+            </Link>
           </Box>
         </Box>
         <Box
@@ -171,6 +185,7 @@ export const Home = () => {
                   email={c.email}
                   id={c.id}
                   user={c.user}
+                  key={c.id}
                 />
               ))
             : "não"}
@@ -255,7 +270,6 @@ export const Home = () => {
         message={message}
         severity={severity}
       />
-
     </>
   );
 };

@@ -15,9 +15,7 @@ export const TokenContext = createContext(initialValue as ITokenContextType);
 // criar o provider
 export const TokenProvider = ({ children }: ITokenContextProps) => {
   const [token, setToken] = useState(initialValue.token);
-  const [authenticated, setAuthenticated] = useState(
-    initialValue.authenticated
-  );
+  const [authenticated, setAuthenticated] = useState(initialValue.token);
 
   useEffect(() => {
     setAuthenticated(token);

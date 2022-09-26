@@ -60,12 +60,12 @@ export const Contacts = () => {
   let { clientId } = useParams();
   const idClient = clientId ? clientId : "";
   const client = clients.find((c) => c.id == clientId);
+
   const dorAdjust = client ? new Date(client.DOR) : "";
   const date = dorAdjust.toLocaleString("pt-BR").substring(0, 10);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("oix2");
     refreshClients();
     refreshContacts(clientId);
   }, []);
@@ -93,10 +93,18 @@ export const Contacts = () => {
     resolver: yupResolver(schema),
   });
 
-  const { token } = useToken();
+  const { token, authenticated } = useToken();
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [openToast, setOpenToast] = useState(false);
+
+  if (!authenticated) {
+    return navigate("/");
+  }
+
+  if (!client) {
+    return navigate("/home");
+  }
 
   const onSubmitFunction = ({ name, email, telephone }: IContactPost) => {
     const contact = {

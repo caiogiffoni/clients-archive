@@ -53,11 +53,16 @@ export const Login = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const { authenticated } = useToken();
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
   const navigate = useNavigate();
+
+  if (authenticated) {
+    return navigate("/home");
+  }
 
   const onSubmitFunction = ({ email, password }: IUserLogin) => {
     const login = {

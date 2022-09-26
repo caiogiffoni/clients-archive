@@ -19,6 +19,7 @@ import { IUserRequest } from "../interface/user";
 import api from "../services";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useToken } from "../providers/token";
 
 type FormValues = {
   name: string;
@@ -66,6 +67,11 @@ export const Register = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const { authenticated } = useToken();
+
+  if (authenticated) {
+    return navigate("/home");
+  }
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
