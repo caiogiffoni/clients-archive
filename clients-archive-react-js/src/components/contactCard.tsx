@@ -17,30 +17,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
-import { ModalConfirmationEdit } from "../components/modalConfirmationEdit";
 import { IClientPost } from "../interface/clients";
 import { useClients } from "../providers/clients";
 import { useToken } from "../providers/token";
 import api from "../services";
-
-import { IClients } from "../interface/clients";
 import { ModalConfirmationDelete } from "./modalConfirmationDelete";
 import { SnackBarRegisterLogin } from "./snack-bar";
+import { IContactCard } from "../interface/contacts";
 
-export const ClientsCard = ({
-  DOR,
-  email,
-  id,
-  name,
-  telephone,
-  user,
-}: IClients) => {
+export const ContactsCard = ({ email, id, name, telephone }: IContactCard) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const date = new Date(DOR);
-  const dateStr = date.toLocaleString("pt-BR").substring(0, 10);
 
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
@@ -157,7 +145,7 @@ export const ClientsCard = ({
       <Box
         sx={{
           m: 1,
-          width: { xs: "80%", sm: "60%" },
+          width: { xs: "95%", sm: "90%" },
           minHeight: "80px",
           backgroundColor: "#948c8c",
           borderRadius: "20px",
@@ -204,12 +192,6 @@ export const ClientsCard = ({
               alignItems: "center",
             }}
           >
-            <Typography
-              variant="body2"
-              sx={{ pl: 1, display: "inline", pr: 2 }}
-            >
-              Data de registro: {dateStr}
-            </Typography>
             <Button variant="contained">
               <Link
                 to={`/contacts/${id}`}
