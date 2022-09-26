@@ -6,18 +6,15 @@ on:
   pull_request:
     branches: [ main ]
     
-        
-defaults:
- run:
-  working-directory: ./app
 
 jobs:
   integration_tests:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./clients-archive-node-js
 
     steps:
-      - name: Change Directory
-        working-directory: ./clients-archive-node-js
       - name: Checkout
         uses: actions/checkout@v2
       
