@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import { forwardRef, Fragment, useState } from "react";
+import { forwardRef, Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -64,14 +64,16 @@ export const Register = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (authenticated) {
+      return navigate("/home");
+    }
+  }, []);
+
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const { authenticated } = useToken();
-
-  if (authenticated) {
-    return navigate("/home");
-  }
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));

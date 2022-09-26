@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import Box from "@mui/material/Box";
 import {
@@ -31,8 +31,16 @@ type FormValues = {
 export const Login = () => {
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const { setToken, token } = useToken();
+  const { setToken, token, authenticated } = useToken();
   const { setUsername } = useUsername();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authenticated) {
+      return navigate("/home");
+    }
+  }, []);
 
   const schema = yup.object().shape({
     email: yup
@@ -53,16 +61,9 @@ export const Login = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
-  const { authenticated } = useToken();
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
-
-  const navigate = useNavigate();
-
-  if (authenticated) {
-    return navigate("/home");
-  }
 
   const onSubmitFunction = ({ email, password }: IUserLogin) => {
     const login = {

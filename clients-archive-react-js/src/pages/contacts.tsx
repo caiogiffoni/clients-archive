@@ -120,8 +120,8 @@ export const Contacts = () => {
         setMessage(
           `${
             err.response.data.message ==
-            "This email already exists on your client"
-              ? "Esse email já está cadastrado"
+            "This email already exists on your contacts for this client"
+              ? "Esse email já está cadastrado para esse cliente"
               : err.response.data.message
           }`
         );

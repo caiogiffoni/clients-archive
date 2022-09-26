@@ -156,7 +156,6 @@ export const Home = () => {
         <Box
           sx={{
             mt: "25px",
-            width: "99vw",
             minHeight: "400px",
             backgroundColor: "#adabab",
             display: "flex",
