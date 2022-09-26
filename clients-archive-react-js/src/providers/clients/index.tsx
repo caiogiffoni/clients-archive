@@ -1,6 +1,7 @@
 // fazer os imports
 import { createContext, useContext, useEffect, useState } from "react";
 import {
+  IClientPost,
   IClientsContextProps,
   IClientsContextType,
 } from "../../interface/clients";
@@ -32,8 +33,11 @@ export const ClientsProvider = ({ children }: IClientsContextProps) => {
       .catch((e) => console.log(e));
   };
 
+
   return (
-    <ClientsContext.Provider value={{ clients, setClients, refreshClients }}>
+    <ClientsContext.Provider
+      value={{ clients, setClients, refreshClients }}
+    >
       {children}
     </ClientsContext.Provider>
   );

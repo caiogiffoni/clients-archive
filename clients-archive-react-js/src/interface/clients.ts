@@ -21,7 +21,6 @@ export interface IClientsContextType {
   clients: IClients[];
   setClients: (newState: []) => void;
   refreshClients: () => void;
-  //   token: string;
 }
 
 export interface IClientsContextProps {

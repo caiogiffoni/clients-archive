@@ -24,18 +24,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { IClientPost } from "../interface/clients";
 import { useToken } from "../providers/token";
 import { SnackBarRegisterLogin } from "../components/snack-bar";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "white",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { ModalConfirmationEdit } from "../components/modalConfirmationEdit";
 
 type FormValues = {
   name: string;
@@ -72,13 +61,13 @@ export const Home = () => {
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [openToast, setOpenToast] = useState(false);
 
+
   const onSubmitFunction = ({ name, email, telephone }: IClientPost) => {
     const client = {
       name,
       email,
       telephone,
     };
-    console.log(client);
     api
       .post("/client", client, {
         headers: { Authorization: `Bearer ${token}` },
@@ -117,6 +106,18 @@ export const Home = () => {
   useEffect(() => {
     refreshClients();
   }, []);
+
+  const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: { xs: 200, sm: 380, md: 600 },
+    bgcolor: "white",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
 
   return (
     <>
@@ -183,6 +184,10 @@ export const Home = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+          <Box display={"flex"} justifyContent={"flex-end"}>
+            <CloseIcon onClick={handleClose} />
+          </Box>
+
           <Box
             sx={{
               p: 1,
@@ -201,14 +206,12 @@ export const Home = () => {
                 !!errors.name?.message ? (errors.name?.message as string) : ""
               }
             />
-            <Box>
-              <CloseIcon onClick={handleClose} />
-            </Box>
           </Box>
           <Box
             sx={{
               p: 1,
               display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
               justifyContent: "space-between",
               alignItems: "center",
             }}
@@ -216,7 +219,7 @@ export const Home = () => {
             <TextField
               label="Email"
               variant="standard"
-              sx={{ width: "300px" }}
+              sx={{ pb: { xs: 2, sm: 0 } }}
               {...register("email")}
               error={!!errors.email?.message}
               helperText={
@@ -226,7 +229,7 @@ export const Home = () => {
             <TextField
               label="Contato"
               variant="standard"
-              sx={{ width: "120px", pr: 1 }}
+              sx={{ pr: 1, width: { sm: 110 } }}
               {...register("telephone")}
               error={!!errors.telephone?.message}
               helperText={
@@ -252,6 +255,7 @@ export const Home = () => {
         message={message}
         severity={severity}
       />
+
     </>
   );
 };
