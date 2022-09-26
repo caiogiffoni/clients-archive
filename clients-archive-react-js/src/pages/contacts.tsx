@@ -10,6 +10,8 @@ import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { useEffect, useState } from "react";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useUsername } from "../providers/username";
@@ -27,18 +29,7 @@ import { useToken } from "../providers/token";
 import { SnackBarRegisterLogin } from "../components/snack-bar";
 import { ContactsCard } from "../components/contactCard";
 import { useContacts } from "../providers/contact";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: 200, sm: 380, md: 600 },
-  bgcolor: "white",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { Link } from "react-router-dom";
 
 type FormValues = {
   name: string;
@@ -66,6 +57,13 @@ export const Contacts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!authenticated) {
+      return navigate("/");
+    }
+
+    if (!client) {
+      return navigate("/home");
+    }
     refreshClients();
     refreshContacts(clientId);
   }, []);
@@ -88,23 +86,16 @@ export const Contacts = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
 
-  const { token, authenticated } = useToken();
+  const { token, authenticated, setAuthenticated } = useToken();
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [openToast, setOpenToast] = useState(false);
-
-  if (!authenticated) {
-    return navigate("/");
-  }
-
-  if (!client) {
-    return navigate("/home");
-  }
 
   const onSubmitFunction = ({ name, email, telephone }: IContactPost) => {
     const contact = {
@@ -122,6 +113,7 @@ export const Contacts = () => {
         setOpenToast(true);
         setOpen(false);
         refreshContacts(clientId);
+        reset();
       })
       .catch((err) => {
         setSeverity("error");
@@ -138,12 +130,45 @@ export const Contacts = () => {
       });
   };
 
+  const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: { xs: 200, sm: 380, md: 600 },
+    bgcolor: "white",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <>
       <Box>
-        <Typography variant="h3" sx={{ p: 3 }}>
-          Bem vindo(a), {username}!
-        </Typography>
+        <Box
+          pr={3}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant={matchesSm ? "h5" : "h3"} sx={{ p: 3 }}>
+            Bem vindo(a), {username}!
+          </Typography>
+          <Box
+            p={1}
+            onClick={() => {
+              localStorage.clear();
+              setAuthenticated("");
+            }}
+          >
+            <Link to={`/`}>
+              <LogoutIcon />
+            </Link>
+          </Box>
+        </Box>
         <Box
           sx={{
             mt: "25px",
@@ -158,7 +183,7 @@ export const Contacts = () => {
           <Box
             sx={{
               m: 1,
-              width: "60%",
+              width: { xs: "80%", md: "60%" },
               minHeight: "80px",
               backgroundColor: "#adabab",
               borderRadius: "10px",
@@ -179,25 +204,32 @@ export const Contacts = () => {
                 <Typography variant="h6" sx={{ display: "inline" }}>
                   {client && client.name}
                 </Typography>
-                <Box>
-                  <ArrowBackIcon
-                    sx={{ pr: 1 }}
-                    onClick={() => navigate("/home")}
-                  />
+                <Box
+                  sx={{
+                    backgroundColor: "#d1caca",
+                    borderRadius: "5px",
+                    mr: 1,
+                  }}
+                >
+                  <ArrowBackIcon onClick={() => navigate("/home")} />
                 </Box>
               </Box>
               <Box
                 sx={{
                   p: 1,
                   display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
                   justifyContent: "space-between",
-                  alignItems: "center",
+                  alignItems: { xs: "flex-start", sm: "center" },
                 }}
               >
                 <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
                   Email: {client && client.email}
                 </Typography>
-                <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
+                <Typography
+                  variant="body2"
+                  sx={{ pl: 1, display: "inline", pt: { xs: 2, sm: 0 } }}
+                >
                   Contato: {client && client.telephone}
                 </Typography>
               </Box>
@@ -221,7 +253,7 @@ export const Contacts = () => {
                 alignItems: "center",
               }}
             >
-              <Typography pr={2}>Adicione aqui seus contatos:</Typography>
+              <Typography pr={2}>Adicione aqui os contatos:</Typography>
               <Button variant="contained" onClick={handleOpen}>
                 Adicionar Contatos
               </Button>

@@ -53,20 +53,17 @@ export const Home = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
 
-  const { token, authenticated, setAuthenticated } = useToken();
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [openToast, setOpenToast] = useState(false);
+  const { token, authenticated, setAuthenticated } = useToken();
   const navigate = useNavigate();
-
-  if (!authenticated) {
-    return navigate("/");
-  }
 
   const onSubmitFunction = ({ name, email, telephone }: IClientPost) => {
     const client = {
@@ -84,6 +81,7 @@ export const Home = () => {
         setOpenToast(true);
         setOpen(false);
         refreshClients();
+        reset();
       })
       .catch((err) => {
         setSeverity("error");
@@ -110,6 +108,9 @@ export const Home = () => {
   const { refreshClients, clients } = useClients();
 
   useEffect(() => {
+    if (!authenticated) {
+      return navigate("/");
+    }
     refreshClients();
   }, []);
 

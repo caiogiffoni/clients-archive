@@ -127,7 +127,7 @@ export const ClientsCard = ({
       });
   };
 
-  const deleteClient = ({id}: IClientDelete) => {
+  const deleteClient = ({ id }: IClientDelete) => {
     api
       .delete(`/client/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -215,7 +215,7 @@ export const ClientsCard = ({
                 to={`/contacts/${id}`}
                 style={{ textDecoration: "none", color: "white" }}
               >
-                Adicionar Contatos
+                Ver Contatos
               </Link>
             </Button>
           </Box>

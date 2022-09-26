@@ -34,11 +34,11 @@ export const ModalConfirmationDelete = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: { xs: 100, sm: 150, md: 400 },
+    width: { xs: 250, sm: 300, md: 400 },
     bgcolor: "white",
     border: "2px solid #000",
     boxShadow: 24,
-    p: 4,
+    p: 2,
   };
 
   return (
@@ -54,13 +54,13 @@ export const ModalConfirmationDelete = ({
         </Box>
         <Box
           sx={{
-            p: 1,
+            p: 0.1,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <Typography>Tem certeza que deseja deletar esse cliente? </Typography>
+          <Typography>Tem certeza que deseja deletar? </Typography>
         </Box>
         <Box
           sx={{
