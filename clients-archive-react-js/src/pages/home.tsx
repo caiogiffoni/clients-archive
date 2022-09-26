@@ -1,15 +1,29 @@
-import { Button, Container, Modal, TextField, Typography } from "@mui/material";
+import {
+  AlertColor,
+  Button,
+  Container,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { useState } from "react";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import dayjs, { Dayjs } from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Link } from "react-router-dom";
-import { useToken } from "../providers/token";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import { useEffect, useState } from "react";
 import { useUsername } from "../providers/username";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useClients } from "../providers/clients";
+import { ClientsCard } from "../components/clientsCard";
+import CloseIcon from "@mui/icons-material/Close";
+import * as yup from "yup";
+import api from "../services";
+import { useForm } from "react-hook-form";
+import SendIcon from "@mui/icons-material/Send";
+import { IClientPost } from "../interface/clients";
+import { useToken } from "../providers/token";
+import { SnackBarRegisterLogin } from "../components/snack-bar";
 
 const style = {
   position: "absolute" as "absolute",
@@ -23,37 +37,112 @@ const style = {
   p: 4,
 };
 
+type FormValues = {
+  name: string;
+  email: string;
+  telephone: string;
+};
+
 export const Home = () => {
+  const schema = yup.object().shape({
+    name: yup
+      .string()
+      .required("Campo obrigatório!")
+      .min(5, "Mínimo 5 Caracteres"),
+    email: yup
+      .string()
+      .required("Campo obrigatório!")
+      .email("E-mail inválido!"),
+    telephone: yup
+      .string()
+      .required("Campo obrigatório!")
+      .min(6, "Mínimo 6 Caracteres"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema),
+  });
+
+  const { token } = useToken();
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState<AlertColor>("success");
+  const [openToast, setOpenToast] = useState(false);
+
+  const onSubmitFunction = ({ name, email, telephone }: IClientPost) => {
+    const client = {
+      name,
+      email,
+      telephone,
+    };
+    console.log(client);
+    api
+      .post("/client", client, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(async (_) => {
+        setSeverity("success");
+        setMessage("Cliente cadastrado!");
+        setOpenToast(true);
+        setOpen(false);
+        refreshClients();
+      })
+      .catch((err) => {
+        setSeverity("error");
+        setMessage(
+          `${
+            err.response.data.message ==
+            "This email already exists on your client"
+              ? "Esse email já está cadastrado"
+              : err.response.data.message
+          }`
+        );
+        setOpenToast(true);
+        // console.log(err);
+      });
+  };
+
+  const theme = useTheme();
+  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { setToken, token } = useToken();
   const { username } = useUsername();
+  const { refreshClients, clients } = useClients();
 
-  console.log(token);
-  console.log(username);
-
-  const [value, setValue] = useState<Dayjs | null>(
-    dayjs("2014-08-18T21:11:54")
-  );
-
-  const handleChange = (newValue: Dayjs | null) => {
-    setValue(newValue);
-  };
+  useEffect(() => {
+    refreshClients();
+  }, []);
 
   return (
     <>
       <Box>
-        <Typography variant="h3" sx={{ p: 3 }}>
-          Bem vindo, João!
-        </Typography>
+        <Box
+          pr={3}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant={matchesSm ? "h5" : "h3"} sx={{ p: 3 }}>
+            Bem vindo(a), {username}!
+          </Typography>
+          <Box p={1}>
+            <LogoutIcon />
+          </Box>
+        </Box>
         <Box
           sx={{
             mt: "25px",
             width: "99vw",
             minHeight: "400px",
-            backgroundColor: "black",
+            backgroundColor: "#adabab",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-start",
@@ -61,67 +150,29 @@ export const Home = () => {
           }}
         >
           <Box
+            p={2}
             sx={{
-              m: 1,
-              width: "60%",
-              minHeight: "80px",
-              backgroundColor: "red",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <Box>
-              <Box
-                sx={{
-                  p: 1,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="h6" sx={{ display: "inline" }}>
-                  João Marques Oliveira
-                </Typography>
-                <Box>
-                  <ModeEditIcon sx={{ pr: 1 }} onClick={handleOpen} />
-                  <DeleteIcon />
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  p: 1,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
-                  Email: joao.marques@oliveira.com
-                </Typography>
-                <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
-                  Contato: 85 9 99958478
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  p: 1,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="body2" sx={{ pl: 1, display: "inline" }}>
-                  Data de registro: 25/12/2022
-                </Typography>
-                <Button variant="contained">
-                  <Link
-                    to="/contacts"
-                    style={{ textDecoration: "none", color: "white" }}
-                  >
-                    Adicionar Contatos
-                  </Link>
-                </Button>
-              </Box>
-            </Box>
+            <Typography pr={2}>Adicione aqui seus clientes:</Typography>
+            <Button variant="contained" onClick={handleOpen}>
+              Adicionar Clientes
+            </Button>
           </Box>
+          {clients
+            ? clients.map((c) => (
+                <ClientsCard
+                  name={c.name}
+                  telephone={c.telephone}
+                  DOR={c.DOR}
+                  email={c.email}
+                  id={c.id}
+                  user={c.user}
+                />
+              ))
+            : "não"}
         </Box>
       </Box>
 
@@ -143,12 +194,15 @@ export const Home = () => {
             <TextField
               label="Nome Completo"
               variant="standard"
-              value={"João Marques Oliveira"}
               sx={{ width: "300px" }}
+              {...register("name")}
+              error={!!errors.name?.message}
+              helperText={
+                !!errors.name?.message ? (errors.name?.message as string) : ""
+              }
             />
             <Box>
-              <ModeEditIcon sx={{ pr: 1 }} onClick={handleOpen} />
-              <DeleteIcon />
+              <CloseIcon onClick={handleClose} />
             </Box>
           </Box>
           <Box
@@ -162,36 +216,42 @@ export const Home = () => {
             <TextField
               label="Email"
               variant="standard"
-              value={"joao.marques@oliveira.com"}
               sx={{ width: "300px" }}
+              {...register("email")}
+              error={!!errors.email?.message}
+              helperText={
+                !!errors.email?.message ? (errors.email?.message as string) : ""
+              }
             />
             <TextField
               label="Contato"
               variant="standard"
-              value={"85 9 99958478"}
               sx={{ width: "120px", pr: 1 }}
+              {...register("telephone")}
+              error={!!errors.telephone?.message}
+              helperText={
+                !!errors.telephone?.message
+                  ? (errors.telephone?.message as string)
+                  : ""
+              }
             />
           </Box>
-          <Box
-            sx={{
-              p: 1,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+          <Button
+            onClick={handleSubmit(onSubmitFunction)}
+            variant="contained"
+            endIcon={<SendIcon />}
+            sx={{ width: { sm: "50%", md: "30%" }, mt: "12px" }}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DesktopDatePicker
-                label="Data de Registro"
-                inputFormat="DD/MM/YYYY"
-                value={value}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </Box>
+            Enviar
+          </Button>
         </Box>
       </Modal>
+      <SnackBarRegisterLogin
+        open={openToast}
+        setOpen={setOpenToast}
+        message={message}
+        severity={severity}
+      />
     </>
   );
 };

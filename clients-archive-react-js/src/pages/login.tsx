@@ -34,8 +34,6 @@ export const Login = () => {
   const { setToken, token } = useToken();
   const { setUsername } = useUsername();
 
-  console.log(token);
-
   const schema = yup.object().shape({
     email: yup
       .string()
