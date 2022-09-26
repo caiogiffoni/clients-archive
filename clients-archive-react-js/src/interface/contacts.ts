@@ -46,4 +46,10 @@ export interface IContactCard {
   name: string;
   telephone: string;
   email: string;
+  clientId: string | undefined;
+}
+
+export interface IContactDelete {
+  id: string;
+  clientId?: string | undefined;
 }

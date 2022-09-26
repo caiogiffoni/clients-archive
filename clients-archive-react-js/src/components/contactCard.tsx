@@ -17,15 +17,22 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
-import { IClientPost } from "../interface/clients";
+import { IContactPost, IContactDelete } from "../interface/contacts";
 import { useClients } from "../providers/clients";
 import { useToken } from "../providers/token";
 import api from "../services";
 import { ModalConfirmationDelete } from "./modalConfirmationDelete";
 import { SnackBarRegisterLogin } from "./snack-bar";
 import { IContactCard } from "../interface/contacts";
+import { useContacts } from "../providers/contact";
 
-export const ContactsCard = ({ email, id, name, telephone }: IContactCard) => {
+export const ContactsCard = ({
+  email,
+  id,
+  name,
+  telephone,
+  clientId,
+}: IContactCard) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -82,31 +89,32 @@ export const ContactsCard = ({ email, id, name, telephone }: IContactCard) => {
   const [openToast, setOpenToast] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const { refreshClients, clients } = useClients();
+  const { refreshContacts } = useContacts();
 
-  const onSubmitFunction = ({ name, email, telephone }: IClientPost) => {
+  const onSubmitFunction = ({ name, email, telephone }: IContactPost) => {
     const client = {
       name,
       email,
       telephone,
     };
     api
-      .patch(`/client/${id}`, client, {
+      .patch(`/contact/${clientId}/${id}`, client, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(async (_) => {
         setSeverity("success");
-        setMessage("Cliente editado!");
+        setMessage("Contato editado!");
         setOpenToast(true);
         setOpen(false);
-        refreshClients();
+        refreshContacts(clientId);
       })
       .catch((err) => {
         setSeverity("error");
         setMessage(
           `${
             err.response.data.message ==
-            "This email already exists on your client"
-              ? "Esse email já está cadastrado"
+            "This email already exists on your contacts for this client"
+              ? "Esse email já está cadastrado para esse cliente"
               : err.response.data.message
           }`
         );
@@ -115,15 +123,15 @@ export const ContactsCard = ({ email, id, name, telephone }: IContactCard) => {
       });
   };
 
-  const deleteClient = (id: string) => {
+  const deleteContact = ({ id, clientId }: IContactDelete) => {
     api
-      .delete(`/client/${id}`, {
+      .delete(`/contact/${clientId}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(async (_) => {
         setSeverity("success");
-        setMessage("Cliente deletado!");
-        refreshClients();
+        setMessage("Contato deletado!");
+        refreshContacts(clientId);
       })
       .catch((err) => {
         setSeverity("error");
@@ -191,16 +199,7 @@ export const ContactsCard = ({ email, id, name, telephone }: IContactCard) => {
               justifyContent: "space-between",
               alignItems: "center",
             }}
-          >
-            <Button variant="contained">
-              <Link
-                to={`/contacts/${id}`}
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                Adicionar Contatos
-              </Link>
-            </Button>
-          </Box>
+          ></Box>
         </Box>
       </Box>
       <Modal
@@ -297,7 +296,8 @@ export const ContactsCard = ({ email, id, name, telephone }: IContactCard) => {
         open={openDelete}
         setOpen={setOpenDelete}
         id={id}
-        deleteClient={deleteClient}
+        deleteClient={deleteContact}
+        clientId={clientId}
       />
       <SnackBarRegisterLogin
         open={openToast}

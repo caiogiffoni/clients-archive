@@ -32,3 +32,7 @@ export interface IClientPost {
   telephone: string;
   email: string;
 }
+export interface IClientDelete {
+  id: string;
+  clientId?: string | undefined;
+}

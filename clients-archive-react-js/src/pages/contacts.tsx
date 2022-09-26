@@ -280,6 +280,7 @@ export const Contacts = () => {
                       id={contact.id}
                       name={contact.name}
                       telephone={contact.telephone}
+                      clientId={clientId}
                     />
                   );
                 })}

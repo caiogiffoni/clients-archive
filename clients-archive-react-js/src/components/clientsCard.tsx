@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { ModalConfirmationEdit } from "../components/modalConfirmationEdit";
-import { IClientPost } from "../interface/clients";
+import { IClientDelete, IClientPost } from "../interface/clients";
 import { useClients } from "../providers/clients";
 import { useToken } from "../providers/token";
 import api from "../services";
@@ -127,7 +127,7 @@ export const ClientsCard = ({
       });
   };
 
-  const deleteClient = (id: string) => {
+  const deleteClient = ({id}: IClientDelete) => {
     api
       .delete(`/client/${id}`, {
         headers: { Authorization: `Bearer ${token}` },

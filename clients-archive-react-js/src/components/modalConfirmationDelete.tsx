@@ -5,11 +5,17 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { IClientPost } from "../interface/clients";
 
+interface OpenDeleteFunction {
+  id: string;
+  clientId?: string | undefined;
+}
+
 interface OpenDeleteModal {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   id: string;
-  deleteClient: (id: string) => void;
+  deleteClient: ({ id, clientId }: OpenDeleteFunction) => void;
+  clientId?: string | undefined;
 }
 
 export const ModalConfirmationDelete = ({
@@ -17,6 +23,7 @@ export const ModalConfirmationDelete = ({
   setOpen,
   id,
   deleteClient,
+  clientId,
 }: OpenDeleteModal) => {
   //   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -67,7 +74,7 @@ export const ModalConfirmationDelete = ({
             variant="contained"
             color="error"
             onClick={() => {
-              deleteClient(id);
+              deleteClient({ id, clientId });
             }}
           >
             Deletar
