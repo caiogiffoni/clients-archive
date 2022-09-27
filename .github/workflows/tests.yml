@@ -10,6 +10,8 @@ defaults:
   run:
     working-directory: ./clients-archive-node-js
     
+env:
+  SECRET_KEY: random
 
 jobs:
   integration_tests:
