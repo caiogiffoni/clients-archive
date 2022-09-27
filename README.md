@@ -25,6 +25,7 @@ Sem figma para essa aplicação
 
 - [X] React com Typescript
 - [X] Material UI
+- [X] Vite
 - [X] Vercel
 - [X] NodeJs
 - [X] Express
